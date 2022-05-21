@@ -52,8 +52,21 @@
         <div class="card">
             <div class="card-body">
                 <!------------------------------------------------------------------------------>
+
+                <div class="input-group mb-2 mr-sm-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">Up Limit</div>
+                    </div>
+                    <input type="number" class="form-control" id="upLimitBidInput" value="0" placeholder="EX: 400">
+
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">Dn Limit</div>
+                    </div>
+                    <input type="number" class="form-control" id="dnLimitBidInput" value="0" placeholder="EX: 200">
+</div>
                 <table class="table table-hover table-responsive table-sm">
                     <thead  class="text-center">
+                        <tr class="text-center" id="bidTotalRange"></tr>
                         <tr>
                             <th>Price</th>
                             <th><span class="asset">Asset</span></th>
@@ -75,8 +88,21 @@
             <div class="card-body ">
                 <!------------------------------------------------------------------------------>
 
+                <div class="input-group mb-2 mr-sm-2">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">Up Limit</div>
+                </div>
+                <input type="number" class="form-control" id="upLimitAskInput" value="0" placeholder="EX: 200">
+
+                <div class="input-group-prepend">
+                    <div class="input-group-text">Dn Limit</div>
+                </div>
+                <input type="number" class="form-control" id="dnLimitAskInput" value="0" placeholder="EX: 400">
+</div>
+
                 <table class="table table-hover table-responsive table-sm ">
                     <thead class="text-center">
+                        <tr class="text-center" id="askTotalRange"></tr>
                         <tr>
                             <th>Total <span class="quote">Quote</span></th>
                             <th>Total <span class="asset">Asset</span></th>

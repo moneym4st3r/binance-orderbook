@@ -162,6 +162,13 @@ async function getBook(pair) {
 function render(book) {
     const htmlBids = htmlBid(book)
     const htmlAsks = htmlAsk(book)
+    const rangeData = getRangeData(book)
+    const htmlRange = {
+        bid:htmlBidRange(rangeData),
+        ask:htmlAskRange(rangeData),
+    }
+    $('#bidTotalRange').html(htmlRange.bid)
+    $('#askTotalRange').html(htmlRange.ask)
     $('#orderBookDataBuy').html(htmlBids)
     $('#orderBookDataSell').html(htmlAsks)
 }
@@ -195,6 +202,81 @@ function htmlAsk(book) {
     }
     return html
 }
+function htmlBidRange(rangeData) {
+    return '<td>'+rangeData.bid.price[0]+' <-> '+rangeData.bid.price[1]+'</td><td>'+rangeData.bid.amount+'</td><td>'+rangeData.bid.total+'</td><td></td><td></td>';
+}
+function htmlAskRange(rangeData) {
+    return '<td></td><td></td><td>'+rangeData.ask.total+'</td><td>'+rangeData.ask.amount+'</td><td>'+rangeData.ask.price[0]+' <-> '+rangeData.ask.price[1]+'</td>';
+}
+function getRangeData(book) {
+    var rangeData = {
+        bid:{
+            price: [],
+            amount: 0,
+            total: 0,
+        },
+        ask:{
+            price: [],
+            amount: 0,
+            total: 0,
+        }
+    }
+    let bidLimits = getBidLimit();
+    let askLimits = getAskLimit();
+    book.bids.forEach((bid) => {
+        if (bid.price >= bidLimits.min && bid.price <= bidLimits.max) {
+            rangeData.bid.price.push(bid.price)
+            rangeData.bid.amount += bid.amount
+            rangeData.bid.total += bid.total
+        }
+    }
+    )
+    book.asks.forEach((ask) => {
+        if (ask.price >= askLimits.min && ask.price <= askLimits.max) {
+            rangeData.ask.price.push(ask.price)
+            rangeData.ask.amount += ask.amount
+            rangeData.ask.total += ask.total
+        }
+    }
+    )
+    bidPrices = rangeData.bid.price.sort(function(a, b) {
+        return parseFloat(a) - parseFloat(b)
+    })
+    askPrices = rangeData.ask.price.sort(function(a, b) {
+        return parseFloat(a) - parseFloat(b)
+    })
+    let res ={
+        bid: {
+            price: [bidPrices[0], bidPrices[bidPrices.length - 1]],
+            amount: rangeData.bid.amount,
+            total: rangeData.bid.total,
+        },
+        ask: {
+            price: [askPrices[0], askPrices[askPrices.length - 1]],
+            amount: rangeData.ask.amount,
+            total: rangeData.ask.total,
+        },
+    };
+    return res;
+
+}
+function getBidLimit() {
+    up=$('#upLimitBidInput').val()
+    down=$('#dnLimitBidInput').val()
+    return {
+        max:parseFloat(up),
+        min:parseFloat(down)
+    }
+}
+function getAskLimit() {
+    up=$('#upLimitAskInput').val()
+    down=$('#dnLimitAskInput').val()
+    return {
+        max:parseFloat(up),
+        min:parseFloat(down)
+    }
+}
+
 function newLevels(a, b) {
     const isSamePrice = (a, b) => a.price === b.price
     const onlyInLeft = (left, right, compareFunction) =>
