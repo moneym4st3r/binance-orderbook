@@ -167,6 +167,14 @@ function render(book) {
         bid:htmlBidRange(rangeData),
         ask:htmlAskRange(rangeData),
     }
+    var precision = parseInt(getPrecision());
+    var total = parseFloat(rangeData.bid.total).toFixed(precision)-parseFloat(rangeData.ask.total).toFixed(precision);
+    if(total>0){
+        $(".float").text(total).css('background-color','green');
+    }else{
+        total = -1*total;
+        $(".float").text(total).css('background-color','red');
+    }
     $('#bidTotalRange').html(htmlRange.bid)
     $('#askTotalRange').html(htmlRange.ask)
     $('#orderBookDataBuy').html(htmlBids)
@@ -203,10 +211,37 @@ function htmlAsk(book) {
     return html
 }
 function htmlBidRange(rangeData) {
-    return '<td>'+rangeData.bid.price[0]+' <-> '+rangeData.bid.price[1]+'</td><td>'+rangeData.bid.amount+'</td><td>'+rangeData.bid.total+'</td><td></td><td></td>';
+    var precision = parseInt(getPrecision());
+    var total = parseFloat(rangeData.bid.total).toFixed(precision)-parseFloat(rangeData.ask.total).toFixed(precision);
+    var bidcolor='';
+    var askcolor='';
+    if(total<0) {
+        bidcolor='red';
+        askcolor='green';
+    } else {
+        bidcolor='green';
+        askcolor='red';
+    }
+
+
+    return '<td></td><td></td><td>'+rangeData.bid.price[0]+'</td><td>'+rangeData.bid.price[1]+'</td><td style="color:'+bidcolor+'">'+rangeData.bid.total.toFixed(precision)+'</td>';
 }
 function htmlAskRange(rangeData) {
-    return '<td></td><td></td><td>'+rangeData.ask.total+'</td><td>'+rangeData.ask.amount+'</td><td>'+rangeData.ask.price[0]+' <-> '+rangeData.ask.price[1]+'</td>';
+    var precision = parseInt(getPrecision());
+    var total = parseFloat(rangeData.bid.total).toFixed(precision)-parseFloat(rangeData.ask.total).toFixed(precision);
+    var bidcolor='';
+    var askcolor='';
+    if(total<0) {
+        bidcolor='red';
+        askcolor='green';
+    } else {
+        bidcolor='green';
+        askcolor='red';
+    }
+    return '<td style="color:'+askcolor+'">'+rangeData.ask.total.toFixed(precision)+'</td><td>'+rangeData.ask.price[0]+'</td><td>'+rangeData.ask.price[1]+'</td>';
+}
+function getPrecision(){
+    return $("#pricePrecision").val();
 }
 function getRangeData(book) {
     var rangeData = {
