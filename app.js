@@ -224,7 +224,7 @@ function htmlBidRange(rangeData) {
     }
 
 
-    return '<td></td><td></td><td>'+rangeData.bid.price[0]+'</td><td>'+rangeData.bid.price[1]+'</td><td style="color:'+bidcolor+'">'+rangeData.bid.total.toFixed(precision)+'</td>';
+    return '<td></td><td>'+rangeData.bid.price[0]+'</td><td>'+rangeData.bid.price[1]+'</td><td style="color:'+bidcolor+'">'+rangeData.bid.total.toFixed(precision)+'</td>';
 }
 function htmlAskRange(rangeData) {
     var precision = parseInt(getPrecision());
